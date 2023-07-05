@@ -1,0 +1,74 @@
+DROP TABLE ChampionsLeague;
+DROP TABLE Teams;
+
+CREATE TABLE ChampionsLeague(
+tournament_year int,
+tournament_city varchar(30),
+tournament_country varchar(30),
+winner varchar(30),
+top_scorer varchar(30),
+top_scorer_team varchar(30),
+top_scorer_goals int
+);
+INSERT INTO ChampionsLeague
+VALUES(2023, "Istanbul", "Turkey","Manchester City", "Erling Haaland", "Manchester City", 12);
+
+INSERT INTO ChampionsLeague
+VALUES(2022, "Saint-Denis", "France", "Real Madrid", "Karim Benzema", "Real Madrid", 15);
+
+INSERT INTO ChampionsLeague
+VALUES(2021, "Porto", "Portugal", "Chelsea", "Erling Haaland", "Borussia Dortmund", 10);
+
+INSERT INTO ChampionsLeague
+VALUES(2020, "Lisbon", "Portugal", "Bayern Munich", "Robert Lewandowski", "Bayern Munich", 15);
+
+INSERT INTO ChampionsLeague
+VALUES(2019, "Madrid", "Spain", "Liverpool", "Lionel Messi", "Barcelona", 12);
+
+INSERT INTO ChampionsLeague
+VALUES(2018, "Kyiv", "Ukraine", "Real Madrid", "Cristiano Ronaldo", "Real Madrid", 15);
+
+INSERT INTO ChampionsLeague
+VALUES(2017, "Cardiff", "England", "Real Madrid", "Cristiano Ronaldo", "Real Madrid", 12);
+
+INSERT INTO ChampionsLeague
+VALUES(2016, "Milan", "Italy", "Real Madrid", "Cristiano Ronaldo", "Real Madrid", 16);
+
+CREATE TABLE Teams(
+name varchar(30),
+country varchar(30),
+tournament_won int,
+top_goal_scorers varchar(50)
+);
+INSERT INTO Teams
+VALUES ("Real Madrid", "Spain", 14, "Cristiano Ronaldo");
+
+INSERT INTO Teams
+VALUES("Manchester City", "England", 1, "Sergio Aguero");
+
+INSERT INTO Teams
+VALUES("Chelsea", "England", 2, "Didier Drogba");
+
+INSERT INTO Teams
+VALUES("Bayern Munich", "Germany", 6, "Robert Lewandowski");
+
+INSERT INTO Teams
+VALUES("Liverpool", "England", 6, "Mohamed Salah");
+
+--Question 1: What teams has won in the last three years?
+SELECT winner AS "Last 3 Winners"
+FROM ChampionsLeague
+ORDER BY tournament_year DESC
+LIMIT 3;
+
+--Question 2: Which players have become the top scorer of the tournament whilst being the top scorer of their club? And how many times have they done it?
+
+SELECT ChampionsLeague.top_scorer AS "Players", COUNT(top_scorer) AS "Times Achieved"
+FROM ChampionsLeague JOIN Teams ON top_scorer = top_goal_scorers
+GROUP BY ChampionsLeague.top_scorer;
+
+--Question 3: How many times have a team won in their own country?
+
+SELECT COUNT(ChampionsLeague.winner) AS "Times"
+FROM ChampionsLeague JOIN Teams ON ChampionsLeague.winner = Teams.name
+WHERE ChampionsLeague.tournament_country = Teams.country;
